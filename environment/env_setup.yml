@@ -1,0 +1,14 @@
+name: ml_sec_project
+channels:
+- defaults
+- conda-forge
+dependencies:
+- 'python>=3.11'
+- matplotlib
+- numpy
+- scikit-learn
+- notebook
+- jupyterlab
+- pandas
+- pip
+- tensorflow
