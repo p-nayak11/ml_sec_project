@@ -8,6 +8,8 @@ dependencies:
 - gfortran
 - scipy
 - gcc
+- cython
+- meson
 - openblas
 
 - pip:
