@@ -1,7 +1,6 @@
 name: ml_sec_project
 channels:
 - defaults
-- conda-forge
 dependencies:
 - 'python>=3.11'
 - pip
@@ -12,8 +11,6 @@ dependencies:
 - meson
 - openblas
 - numpy
-- liblapack
-- libopenblas
 
 - pip:
   - jaxmarl
