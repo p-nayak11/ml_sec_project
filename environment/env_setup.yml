@@ -11,6 +11,9 @@ dependencies:
 - cython
 - meson
 - openblas
+- numpy
+- liblapack
+- libopenblas
 
 - pip:
   - jaxmarl
