@@ -7,6 +7,3 @@ dependencies:
 - pip:
   - 'jax[cuda12]'
   - jaxmarl
-  - '-e .[algs]'
-variables:
-  PYTHONPATH: ./JaxMARL:$PYTHONPATH
