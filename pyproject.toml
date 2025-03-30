@@ -6,8 +6,6 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 include = ['jaxmarl*']
 
-[tool.setuptools.dynamic]
-version = {attr = "jaxmarl.__version__"}
 
 [project]
 name = "jaxmarl"
@@ -16,7 +14,7 @@ description = "Multi-Agent Reinforcement Learning with JAX"
 authors = [
     {name = "Foerster Lab for AI Research", email = "arutherford@robots.ox.ac.uk"},
   ]
-dynamic = ["version"]
+version = "0.1.0"
 license = {file = "LICENSE"}
 requires-python = ">=3.10"
 classifiers = [
