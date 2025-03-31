@@ -1,11 +1,12 @@
 #!/bin/bash
 
-create --name ml_sec_proj python=3.11
-conda activate ml_sec_proj
-
-pip install -U "jax[cuda12]"
+pip install poetry
+poetry install
+eval $(poetry env activate)
 pip install -e .[algs]
+poetry add jax[cuda]
 
 export PYTHONPATH=./JaxMARL:$PYTHONPATH
+export JAX_TRACEBACK_FILTERING=off
 
 echo "Environment setup complete."
