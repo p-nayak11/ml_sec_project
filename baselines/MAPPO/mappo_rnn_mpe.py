@@ -273,7 +273,7 @@ def make_train(config):
             runner_state, update_steps = update_runner_state
             all_rewards = {
                 f'agent_{i}': jnp.zeros((1000, 16), dtype=jnp.float32)
-                for i in range(config["NUM_ACTORS"])
+                for i in range(env.num_agents)
             }
             buffer_idx = 0
             
@@ -331,7 +331,7 @@ def make_train(config):
                 return (runner_state, all_rewards, buffer_idx), transition
 
             initial_hstates = runner_state[-2]
-            runner_state, traj_batch = jax.lax.scan(
+            (runner_state, all_rewards, buffer_idx), traj_batch = jax.lax.scan(
                 _env_step, (runner_state, all_rewards, buffer_idx), None, config["NUM_STEPS"]
             )
             
