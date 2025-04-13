@@ -19,6 +19,7 @@
 "NUM_SEEDS": 2
 "ENV_KWARGS": {}
 "ANNEAL_LR": True
+"REWARD_POISON_K": 0.5
 
 # WandB Params
 "WANDB_MODE": "online"

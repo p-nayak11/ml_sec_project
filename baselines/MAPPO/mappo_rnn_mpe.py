@@ -166,6 +166,16 @@ def batchify(x: dict, agent_list, num_actors):
 def unbatchify(x: jnp.ndarray, agent_list, num_envs, num_actors):
     x = x.reshape((num_actors, num_envs, -1))
     return {a: x[i] for i, a in enumerate(agent_list)}
+class RewardPoisoner:
+    def __init__(self, k):
+        self.k = k
+    
+    def poison(reward, all_rewards, k):
+        flatten = reward.flatten()
+        all_rewards = jnp.concatenate([all_rewards, flatten], axis=0)
+        threshold = jnp.percentile(all_rewards, 100 - k)
+        poisoned_reward = jnp.where(reward >= threshold, -reward, reward)
+        return poisoned_reward, all_rewards
 
 
 def make_train(config):
@@ -208,6 +218,9 @@ def make_train(config):
         )
         cr_init_hstate = ScannedRNN.initialize_carry(config["NUM_ENVS"], config["GRU_HIDDEN_DIM"])
         critic_network_params = critic_network.init(_rng_critic, cr_init_hstate, cr_init_x)
+
+        reward_poisoner = RewardPoisoner(k=config.get("REWARD_POISON_K", 0))
+        all_rewards = jnp.array([])
         
         if config["ANNEAL_LR"]:
             actor_tx = optax.chain(
@@ -251,7 +264,7 @@ def make_train(config):
             runner_state, update_steps = update_runner_state
             
             def _env_step(runner_state, unused):
-                train_states, env_state, last_obs, last_done, hstates, rng = runner_state
+                train_states, env_state, last_obs, last_done, hstates, rng, all_rewards = runner_state
 
                 # SELECT ACTION
                 rng, _rng = jax.random.split(rng)
@@ -283,6 +296,7 @@ def make_train(config):
                 obsv, env_state, reward, done, info = jax.vmap(
                     env.step, in_axes=(0, 0, 0)
                 )(rng_step, env_state, env_act)
+                reward, all_rewards = reward_poisoner.poison(reward, all_rewards, config["REWARD_POISON_K"])
                 info = jax.tree.map(lambda x: x.reshape((config["NUM_ACTORS"])), info)
                 done_batch = batchify(done, env.agents, config["NUM_ACTORS"]).squeeze()
                 transition = Transition(
@@ -296,7 +310,7 @@ def make_train(config):
                     world_state,
                     info,
                 )
-                runner_state = (train_states, env_state, obsv, done_batch, (ac_hstate, cr_hstate), rng)
+                runner_state = (train_states, env_state, obsv, done_batch, (ac_hstate, cr_hstate), rng, all_rewards)
                 return runner_state, transition
 
             initial_hstates = runner_state[-2]
@@ -305,7 +319,7 @@ def make_train(config):
             )
             
             # CALCULATE ADVANTAGE
-            train_states, env_state, last_obs, last_done, hstates, rng = runner_state
+            train_states, env_state, last_obs, last_done, hstates, rng, _ = runner_state
       
             last_world_state = last_obs["world_state"].swapaxes(0,1)  
             last_world_state = last_world_state.reshape((config["NUM_ACTORS"],-1))
