@@ -271,10 +271,9 @@ def make_train(config):
         def _update_step(update_runner_state, unused):
             # COLLECT TRAJECTORIES
             runner_state, update_steps = update_runner_state
-            num_agents = 3
             all_rewards = {
                 f'agent_{i}': jnp.zeros((1000, 16), dtype=jnp.float32)
-                for i in range(num_agents)
+                for i in range(config["NUM_ACTORS"])
             }
             buffer_idx = 0
             
