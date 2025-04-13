@@ -168,12 +168,26 @@ def unbatchify(x: jnp.ndarray, agent_list, num_envs, num_actors):
     return {a: x[i] for i, a in enumerate(agent_list)}
 
     
-def poison(reward, all_rewards, k):
-    flatten = reward.flatten()
-    all_rewards = jnp.concatenate([all_rewards, flatten], axis=0)
-    threshold = jnp.percentile(all_rewards, 100 - k)
-    poisoned_reward = jnp.where(reward >= threshold, -reward, reward)
-    return poisoned_reward, all_rewards
+def poison_rewards(rewards, all_rewards, buffer_idx, k):
+    BUFFER_SIZE = 1000
+    new_all_rewards = {}
+    poisoned_rewards = {}
+
+    for agent_id, reward in rewards.items():
+        agent_buffer = all_rewards[agent_id]
+        agent_buffer = agent_buffer.at[buffer_idx % BUFFER_SIZE].set(reward)
+
+        flat_vals = agent_buffer.reshape(-1)
+        sorted_vals = jnp.sort(flat_vals)
+        thresh_idx = int((100 - k) / 100.0 * sorted_vals.shape[0])
+        threshold = sorted_vals[thresh_idx]
+
+        poisoned = jnp.where(reward >= threshold, -reward, reward)
+
+        new_all_rewards[agent_id] = agent_buffer
+        poisoned_rewards[agent_id] = poisoned
+
+    return poisoned_rewards, new_all_rewards
 
 
 def make_train(config):
@@ -257,7 +271,12 @@ def make_train(config):
         def _update_step(update_runner_state, unused):
             # COLLECT TRAJECTORIES
             runner_state, update_steps = update_runner_state
-            all_rewards = jnp.array([])
+            num_agents = 3
+            all_rewards = {
+                f'agent_{i}': jnp.zeros((1000, 16), dtype=jnp.float32)
+                for i in range(num_agents)
+            }
+            buffer_idx = 0
             
             def _env_step(step_states, unused):
                 runner_state, all_rewards = step_states
@@ -293,8 +312,8 @@ def make_train(config):
                 obsv, env_state, reward, done, info = jax.vmap(
                     env.step, in_axes=(0, 0, 0)
                 )(rng_step, env_state, env_act)
-                print("Reward K: ", config.get("REWARD_POISON_K", 0))
-                reward, all_rewards = poison(reward, all_rewards, config.get("REWARD_POISON_K", 0))
+                reward, all_rewards = poison_rewards(reward, all_rewards, buffer_idx, config.get("REWARD_POISON_K", 0))
+                buffer_idx += 1
                 info = jax.tree.map(lambda x: x.reshape((config["NUM_ACTORS"])), info)
                 done_batch = batchify(done, env.agents, config["NUM_ACTORS"]).squeeze()
                 transition = Transition(
@@ -309,6 +328,7 @@ def make_train(config):
                     info,
                 )
                 runner_state = (train_states, env_state, obsv, done_batch, (ac_hstate, cr_hstate), rng)
+                print("Finished run!")
                 return (runner_state, all_rewards), transition
 
             initial_hstates = runner_state[-2]

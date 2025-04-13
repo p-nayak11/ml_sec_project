@@ -22,6 +22,6 @@
 "REWARD_POISON_K": 50
 
 # WandB Params
-"WANDB_MODE": "online"
-"ENTITY": ""
-"PROJECT": ""
+"WANDB_MODE": "disable"
+"ENTITY": "pnayak_test"
+"PROJECT": "MPE_MAPPO"
