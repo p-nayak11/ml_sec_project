@@ -220,7 +220,6 @@ def make_train(config):
         critic_network_params = critic_network.init(_rng_critic, cr_init_hstate, cr_init_x)
 
         reward_poisoner = RewardPoisoner(k=config.get("REWARD_POISON_K", 0))
-        all_rewards = jnp.array([])
         
         if config["ANNEAL_LR"]:
             actor_tx = optax.chain(
@@ -262,9 +261,11 @@ def make_train(config):
         def _update_step(update_runner_state, unused):
             # COLLECT TRAJECTORIES
             runner_state, update_steps = update_runner_state
+            all_rewards = jnp.array([])
             
-            def _env_step(runner_state, unused):
-                train_states, env_state, last_obs, last_done, hstates, rng, all_rewards = runner_state
+            def _env_step(step_states, unused):
+                runner_state, all_rewards = step_states
+                train_states, env_state, last_obs, last_done, hstates, rng = runner_state
 
                 # SELECT ACTION
                 rng, _rng = jax.random.split(rng)
@@ -310,16 +311,16 @@ def make_train(config):
                     world_state,
                     info,
                 )
-                runner_state = (train_states, env_state, obsv, done_batch, (ac_hstate, cr_hstate), rng, all_rewards)
-                return runner_state, transition
+                runner_state = (train_states, env_state, obsv, done_batch, (ac_hstate, cr_hstate), rng)
+                return (runner_state, all_rewards), transition
 
             initial_hstates = runner_state[-2]
             runner_state, traj_batch = jax.lax.scan(
-                _env_step, runner_state, None, config["NUM_STEPS"]
+                _env_step, (runner_state, all_rewards), None, config["NUM_STEPS"]
             )
             
             # CALCULATE ADVANTAGE
-            train_states, env_state, last_obs, last_done, hstates, rng, _ = runner_state
+            train_states, env_state, last_obs, last_done, hstates, rng = runner_state
       
             last_world_state = last_obs["world_state"].swapaxes(0,1)  
             last_world_state = last_world_state.reshape((config["NUM_ACTORS"],-1))
