@@ -279,7 +279,7 @@ def make_train(config):
             buffer_idx = 0
             
             def _env_step(step_states, unused):
-                runner_state, all_rewards = step_states
+                runner_state, all_rewards, buffer_idx = step_states
                 train_states, env_state, last_obs, last_done, hstates, rng = runner_state
 
                 # SELECT ACTION
@@ -329,11 +329,11 @@ def make_train(config):
                 )
                 runner_state = (train_states, env_state, obsv, done_batch, (ac_hstate, cr_hstate), rng)
                 print("Finished run!")
-                return (runner_state, all_rewards), transition
+                return (runner_state, all_rewards, buffer_idx), transition
 
             initial_hstates = runner_state[-2]
             runner_state, traj_batch = jax.lax.scan(
-                _env_step, (runner_state, all_rewards), None, config["NUM_STEPS"]
+                _env_step, (runner_state, all_rewards, buffer_idx), None, config["NUM_STEPS"]
             )
             
             # CALCULATE ADVANTAGE
