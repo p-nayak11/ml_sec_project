@@ -20,7 +20,6 @@ from functools import partial
 import jaxmarl
 from jaxmarl.wrappers.baselines import MPELogWrapper, JaxMARLWrapper
 from jaxmarl.environments.multi_agent_env import MultiAgentEnv, State
-from action_test_attack import apply_action_test_attack, vmap_apply_action_test_attack
 
 import wandb
 import functools
@@ -282,7 +281,6 @@ def make_train(config):
                 runner_state, all_rewards, buffer_idx = step_states
                 train_states, env_state, last_obs, last_done, hstates, rng = runner_state
 
-
                 # SELECT ACTION
                 rng, _rng = jax.random.split(rng)
                 obs_batch = batchify(last_obs, env.agents, config["NUM_ACTORS"])
@@ -296,14 +294,6 @@ def make_train(config):
                 env_act = unbatchify(
                     action, env.agents, config["NUM_ENVS"], env.num_agents
                 )
-                # APPLY ACTION TEST ATTACK if configured
-                if config.get("ACTION_TEST_ENABLED", False):
-                    traitor_idx = config.get("TRAITOR_IDX", 0)
-                    # Apply the action test attack
-                    env_act = jax.tree_map(
-                        lambda acts: apply_action_test_attack(acts, env, traitor_idx),
-                        env_act
-                    )
                 # VALUE
                 # output of wrapper is (num_envs, num_agents, world_state_size)
                 # swap axes to (num_agents, num_envs, world_state_size) before reshaping to (num_actors, world_state_size)

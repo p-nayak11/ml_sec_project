@@ -25,3 +25,7 @@
 "WANDB_MODE": "disabled"
 "ENTITY": "pnayak_test"
 "PROJECT": "MPE_MAPPO"
+
+# Action Test Attack config
+ACTION_TEST_ENABLED: True  # Set to True to enable the attack
+TRAITOR_IDX: 0  # Index of the agent to act as a traitor (0-indexed)
