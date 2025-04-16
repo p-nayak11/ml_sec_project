@@ -20,6 +20,7 @@ from functools import partial
 import jaxmarl
 from jaxmarl.wrappers.baselines import MPELogWrapper, JaxMARLWrapper
 from jaxmarl.environments.multi_agent_env import MultiAgentEnv, State
+from jaxmarl.wrappers.attack_wrappers import StateAttackWrapper
 
 import wandb
 import functools
@@ -178,6 +179,18 @@ def make_train(config):
         config["NUM_ACTORS"] * config["NUM_STEPS"] // config["NUM_MINIBATCHES"]
     )
     config["CLIP_EPS"] = config["CLIP_EPS"] / env.num_agents if config["SCALE_CLIP_EPS"] else config["CLIP_EPS"]
+
+    # Add attack wrapper if enabled
+    if config.get("ATTACK_ENABLED", False):
+        attack_config = {
+            "enabled": config["ATTACK_ENABLED"],
+            "attack_type": config["ATTACK_TYPE"],
+            "attack_magnitude": config["ATTACK_MAGNITUDE"],
+            "attack_probability": config["ATTACK_PROBABILITY"],
+            "targeted_agents": config.get("ATTACK_TARGETED_AGENTS", None),
+            "attack_features": config.get("ATTACK_FEATURES", None),
+        }
+        env = StateAttackWrapper(env, attack_config)
 
     env = MPEWorldStateWrapper(env)
     env = MPELogWrapper(env)
@@ -499,15 +512,19 @@ def make_train(config):
 
             def callback(metric):
                 
-                wandb.log(
-                    {
-                        "returns": metric["returned_episode_returns"][-1, :].mean(),
-                        "env_step": metric["update_steps"]
-                        * config["NUM_ENVS"]
-                        * config["NUM_STEPS"],
-                        **metric["loss"],
-                    }
-                )
+                log_data = {"returns": metric["returned_episode_returns"][-1, :].mean(),
+                            "env_step": metric["update_steps"] * config["NUM_ENVS"] * config["NUM_STEPS"],
+                            **metric["loss"],}
+        
+                # Add attack info to logs if attack is enabled
+                if config.get("ATTACK_ENABLED", False):
+                    log_data.update({
+                        "attack_enabled": config["ATTACK_ENABLED"],
+                        "attack_type": config["ATTACK_TYPE"],
+                        "attack_magnitude": config["ATTACK_MAGNITUDE"],
+                    })
+                    
+                wandb.log(log_data)
                             
             metric["update_steps"] = update_steps
             jax.experimental.io_callback(callback, None, metric)
@@ -535,17 +552,43 @@ def make_train(config):
 def main(config):
 
     config = OmegaConf.to_container(config)
+    tags = ["MAPPO", "RNN", config["ENV_NAME"]]
+    if config.get("ATTACK_ENABLED", False):
+        tags.extend(["MARLSafe", f"attack_{config.get('ATTACK_TYPE', 'random')}"])
     wandb.init(
         entity=config["ENTITY"],
         project=config["PROJECT"],
-        tags=["MAPPO", "RNN", config["ENV_NAME"]],
+        tags=tags,
         config=config,
         mode=config["WANDB_MODE"],
     )
     rng = jax.random.PRNGKey(config["SEED"])
-    with jax.disable_jit(False):
-        train_jit = jax.jit(make_train(config)) 
-        out = train_jit(rng)
+    # Either run comparison or standard training
+    if config.get("RUN_COMPARISON", False):
+        # Run both with and without attack and compare results
+        results = {}
+        
+        # First without attack
+        config_no_attack = config.copy()
+        config_no_attack["ATTACK_ENABLED"] = False
+        rng_no_attack = jax.random.PRNGKey(config["SEED"])
+        train_jit = jax.jit(make_train(config_no_attack))
+        results["no_attack"] = train_jit(rng_no_attack)
+        
+        # Then with attack
+        config_with_attack = config.copy()
+        config_with_attack["ATTACK_ENABLED"] = True
+        rng_with_attack = jax.random.PRNGKey(config["SEED"] + 1)
+        train_jit = jax.jit(make_train(config_with_attack))
+        results["with_attack"] = train_jit(rng_with_attack)
+        
+        return results
+    else:
+        # Standard training
+        with jax.disable_jit(False):
+            train_jit = jax.jit(make_train(config))
+            out = train_jit(rng)
+        return out
 
     
 if __name__=="__main__":
