@@ -20,7 +20,7 @@ from functools import partial
 import jaxmarl
 from jaxmarl.wrappers.baselines import MPELogWrapper, JaxMARLWrapper
 from jaxmarl.environments.multi_agent_env import MultiAgentEnv, State
-from action_test_attack import apply_action_test_attack, vmap_apply_action_test_attack
+from jaxmarl.wrappers.attack_wrappers import StateAttackWrapper
 
 import wandb
 import functools
@@ -168,28 +168,6 @@ def unbatchify(x: jnp.ndarray, agent_list, num_envs, num_actors):
     x = x.reshape((num_actors, num_envs, -1))
     return {a: x[i] for i, a in enumerate(agent_list)}
 
-    
-def poison_rewards(rewards, all_rewards, buffer_idx, k):
-    BUFFER_SIZE = 1000
-    new_all_rewards = {}
-    poisoned_rewards = {}
-
-    for agent_id, reward in rewards.items():
-        agent_buffer = all_rewards[agent_id]
-        agent_buffer = agent_buffer.at[buffer_idx % BUFFER_SIZE].set(reward)
-
-        flat_vals = agent_buffer.reshape(-1)
-        sorted_vals = jnp.sort(flat_vals)
-        thresh_idx = int((100 - k) / 100.0 * sorted_vals.shape[0])
-        threshold = sorted_vals[thresh_idx]
-
-        poisoned = jnp.where(reward >= threshold, -reward, reward)
-
-        new_all_rewards[agent_id] = agent_buffer
-        poisoned_rewards[agent_id] = poisoned
-
-    return poisoned_rewards, new_all_rewards
-
 
 def make_train(config):
     env = jaxmarl.make(config["ENV_NAME"], **config["ENV_KWARGS"])
@@ -201,6 +179,18 @@ def make_train(config):
         config["NUM_ACTORS"] * config["NUM_STEPS"] // config["NUM_MINIBATCHES"]
     )
     config["CLIP_EPS"] = config["CLIP_EPS"] / env.num_agents if config["SCALE_CLIP_EPS"] else config["CLIP_EPS"]
+
+    # Add attack wrapper if enabled
+    if config.get("ATTACK_ENABLED", False):
+        attack_config = {
+            "enabled": config["ATTACK_ENABLED"],
+            "attack_type": config["ATTACK_TYPE"],
+            "attack_magnitude": config["ATTACK_MAGNITUDE"],
+            "attack_probability": config["ATTACK_PROBABILITY"],
+            "targeted_agents": config.get("ATTACK_TARGETED_AGENTS", None),
+            "attack_features": config.get("ATTACK_FEATURES", None),
+        }
+        env = StateAttackWrapper(env, attack_config)
 
     env = MPEWorldStateWrapper(env)
     env = MPELogWrapper(env)
@@ -540,15 +530,19 @@ def make_train(config):
 
             def callback(metric):
                 
-                wandb.log(
-                    {
-                        "returns": metric["returned_episode_returns"][-1, :].mean(),
-                        "env_step": metric["update_steps"]
-                        * config["NUM_ENVS"]
-                        * config["NUM_STEPS"],
-                        **metric["loss"],
-                    }
-                )
+                log_data = {"returns": metric["returned_episode_returns"][-1, :].mean(),
+                            "env_step": metric["update_steps"] * config["NUM_ENVS"] * config["NUM_STEPS"],
+                            **metric["loss"],}
+        
+                # Add attack info to logs if attack is enabled
+                if config.get("ATTACK_ENABLED", False):
+                    log_data.update({
+                        "attack_enabled": config["ATTACK_ENABLED"],
+                        "attack_type": config["ATTACK_TYPE"],
+                        "attack_magnitude": config["ATTACK_MAGNITUDE"],
+                    })
+                    
+                wandb.log(log_data)
                             
             metric["update_steps"] = update_steps
             jax.experimental.io_callback(callback, None, metric)
@@ -576,17 +570,43 @@ def make_train(config):
 def main(config):
 
     config = OmegaConf.to_container(config)
+    tags = ["MAPPO", "RNN", config["ENV_NAME"]]
+    if config.get("ATTACK_ENABLED", False):
+        tags.extend(["MARLSafe", f"attack_{config.get('ATTACK_TYPE', 'random')}"])
     wandb.init(
         entity=config["ENTITY"],
         project=config["PROJECT"],
-        tags=["MAPPO", "RNN", config["ENV_NAME"]],
+        tags=tags,
         config=config,
         mode=config["WANDB_MODE"],
     )
     rng = jax.random.PRNGKey(config["SEED"])
-    with jax.disable_jit(False):
-        train_jit = jax.jit(make_train(config)) 
-        out = train_jit(rng)
+    # Either run comparison or standard training
+    if config.get("RUN_COMPARISON", False):
+        # Run both with and without attack and compare results
+        results = {}
+        
+        # First without attack
+        config_no_attack = config.copy()
+        config_no_attack["ATTACK_ENABLED"] = False
+        rng_no_attack = jax.random.PRNGKey(config["SEED"])
+        train_jit = jax.jit(make_train(config_no_attack))
+        results["no_attack"] = train_jit(rng_no_attack)
+        
+        # Then with attack
+        config_with_attack = config.copy()
+        config_with_attack["ATTACK_ENABLED"] = True
+        rng_with_attack = jax.random.PRNGKey(config["SEED"] + 1)
+        train_jit = jax.jit(make_train(config_with_attack))
+        results["with_attack"] = train_jit(rng_with_attack)
+        
+        return results
+    else:
+        # Standard training
+        with jax.disable_jit(False):
+            train_jit = jax.jit(make_train(config))
+            out = train_jit(rng)
+        return out
 
     
 if __name__=="__main__":
