@@ -1,0 +1,23 @@
+2025-04-16 13:18:05,041 INFO    MainThread:986618 [wandb_setup.py:_flush():67] Current SDK version is 0.19.9
+2025-04-16 13:18:05,041 INFO    MainThread:986618 [wandb_setup.py:_flush():67] Configure stats pid to 986618
+2025-04-16 13:18:05,041 INFO    MainThread:986618 [wandb_setup.py:_flush():67] Loading settings from /home/hice1/araj72/.config/wandb/settings
+2025-04-16 13:18:05,041 INFO    MainThread:986618 [wandb_setup.py:_flush():67] Loading settings from /storage/ice1/4/7/araj72/nandha_files/baselines/MAPPO/wandb/settings
+2025-04-16 13:18:05,041 INFO    MainThread:986618 [wandb_setup.py:_flush():67] Loading settings from environment variables
+2025-04-16 13:18:05,041 INFO    MainThread:986618 [wandb_init.py:setup_run_log_directory():662] Logging user logs to /storage/ice1/4/7/araj72/nandha_files/baselines/MAPPO/wandb/run-20250416_131805-ecm2qvkl/logs/debug.log
+2025-04-16 13:18:05,041 INFO    MainThread:986618 [wandb_init.py:setup_run_log_directory():663] Logging internal logs to /storage/ice1/4/7/araj72/nandha_files/baselines/MAPPO/wandb/run-20250416_131805-ecm2qvkl/logs/debug-internal.log
+2025-04-16 13:18:05,042 INFO    MainThread:986618 [wandb_init.py:init():781] calling init triggers
+2025-04-16 13:18:05,042 INFO    MainThread:986618 [wandb_init.py:init():786] wandb.init called with sweep_config: {}
+config: {'LR': 0.002, 'NUM_ENVS': 16, 'NUM_STEPS': 128, 'TOTAL_TIMESTEPS': 20000000.0, 'FC_DIM_SIZE': 128, 'GRU_HIDDEN_DIM': 128, 'UPDATE_EPOCHS': 4, 'NUM_MINIBATCHES': 4, 'GAMMA': 0.99, 'GAE_LAMBDA': 0.95, 'CLIP_EPS': 0.2, 'SCALE_CLIP_EPS': False, 'ENT_COEF': 0.01, 'VF_COEF': 0.5, 'MAX_GRAD_NORM': 0.5, 'ACTIVATION': 'tanh', 'ENV_NAME': 'MPE_simple_spread_v3', 'SEED': 1, 'NUM_SEEDS': 2, 'ENV_KWARGS': {}, 'ANNEAL_LR': True, 'STATE_ATTACK_ENABLED': False, 'STATE_ATTACK_TYPE': 'random', 'STATE_ATTACK_MAGNITUDE': 1, 'STATE_ATTACK_PROBABILITY': 1, 'STATE_ATTACK_TARGETED_AGENTS': None, 'STATE_ATTACK_FEATURES': None, 'ACTION_ATTACK_ENABLED': True, 'ACTION_ATTACK_TYPE': 'adversarial', 'ACTION_ATTACK_PROBABILITY': 1.0, 'ACTION_ATTACK_STRENGTH': 2, 'ACTION_ATTACK_TARGETED_AGENTS': None, 'RUN_COMPARISON': False, 'WANDB_MODE': 'online', 'ENTITY': '', 'PROJECT': 'MPE_MAPPO', '_wandb': {}}
+2025-04-16 13:18:05,042 INFO    MainThread:986618 [wandb_init.py:init():809] starting backend
+2025-04-16 13:18:05,042 INFO    MainThread:986618 [wandb_init.py:init():813] sending inform_init request
+2025-04-16 13:18:05,049 INFO    MainThread:986618 [backend.py:_multiprocessing_setup():101] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2025-04-16 13:18:05,049 INFO    MainThread:986618 [wandb_init.py:init():823] backend started and connected
+2025-04-16 13:18:05,050 INFO    MainThread:986618 [wandb_init.py:init():915] updated telemetry
+2025-04-16 13:18:05,063 INFO    MainThread:986618 [wandb_init.py:init():939] communicating run to backend with 90.0 second timeout
+2025-04-16 13:18:05,363 INFO    MainThread:986618 [wandb_init.py:init():1014] starting run threads in backend
+2025-04-16 13:18:05,591 INFO    MainThread:986618 [wandb_run.py:_console_start():2454] atexit reg
+2025-04-16 13:18:05,591 INFO    MainThread:986618 [wandb_run.py:_redirect():2306] redirect: wrap_raw
+2025-04-16 13:18:05,591 INFO    MainThread:986618 [wandb_run.py:_redirect():2371] Wrapping output streams.
+2025-04-16 13:18:05,591 INFO    MainThread:986618 [wandb_run.py:_redirect():2394] Redirects installed.
+2025-04-16 13:18:05,597 INFO    MainThread:986618 [wandb_init.py:init():1056] run started, returning control to user process
+2025-04-16 13:55:31,616 INFO    MsgRouterThr:986618 [mailbox.py:close():129] [no run ID] Closing mailbox, abandoning 1 handles.

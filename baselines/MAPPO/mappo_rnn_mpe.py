@@ -20,7 +20,7 @@ from functools import partial
 import jaxmarl
 from jaxmarl.wrappers.baselines import MPELogWrapper, JaxMARLWrapper
 from jaxmarl.environments.multi_agent_env import MultiAgentEnv, State
-from jaxmarl.wrappers.attack_wrappers import StateAttackWrapper
+from jaxmarl.wrappers.attack_wrappers import StateAttackWrapper,ActionAttackWrapper
 
 import wandb
 import functools
@@ -180,17 +180,27 @@ def make_train(config):
     )
     config["CLIP_EPS"] = config["CLIP_EPS"] / env.num_agents if config["SCALE_CLIP_EPS"] else config["CLIP_EPS"]
 
-    # Add attack wrapper if enabled
-    if config.get("ATTACK_ENABLED", False):
-        attack_config = {
-            "enabled": config["ATTACK_ENABLED"],
-            "attack_type": config["ATTACK_TYPE"],
-            "attack_magnitude": config["ATTACK_MAGNITUDE"],
-            "attack_probability": config["ATTACK_PROBABILITY"],
-            "targeted_agents": config.get("ATTACK_TARGETED_AGENTS", None),
-            "attack_features": config.get("ATTACK_FEATURES", None),
+    if config.get("STATE_ATTACK_ENABLED", False) or config.get("ATTACK_ENABLED", False):
+        state_attack_config = {
+            "enabled": config.get("STATE_ATTACK_ENABLED", config.get("ATTACK_ENABLED", False)),
+            "attack_type": config.get("STATE_ATTACK_TYPE", config.get("ATTACK_TYPE", "random")),
+            "attack_magnitude": config.get("STATE_ATTACK_MAGNITUDE", config.get("ATTACK_MAGNITUDE", 0.1)),
+            "attack_probability": config.get("STATE_ATTACK_PROBABILITY", config.get("ATTACK_PROBABILITY", 0.5)),
+            "targeted_agents": config.get("STATE_ATTACK_TARGETED_AGENTS", config.get("ATTACK_TARGETED_AGENTS", None)),
+            "attack_features": config.get("STATE_ATTACK_FEATURES", config.get("ATTACK_FEATURES", None)),
         }
-        env = StateAttackWrapper(env, attack_config)
+        #env = StateAttackWrapper(env, state_attack_config)
+
+    # Add action attack wrapper if enabled
+    if config.get("ACTION_ATTACK_ENABLED", False):
+        action_attack_config = {
+            "enabled": config["ACTION_ATTACK_ENABLED"],
+            "attack_type": config["ACTION_ATTACK_TYPE"],
+            "attack_probability": config["ACTION_ATTACK_PROBABILITY"],
+            "attack_strength": config.get("ACTION_ATTACK_STRENGTH", 1.0),
+            "targeted_agents": config.get("ACTION_ATTACK_TARGETED_AGENTS", None),
+        }
+        env = ActionAttackWrapper(env, action_attack_config)
 
     env = MPEWorldStateWrapper(env)
     env = MPELogWrapper(env)
@@ -296,7 +306,17 @@ def make_train(config):
                 obsv, env_state, reward, done, info = jax.vmap(
                     env.step, in_axes=(0, 0, 0)
                 )(rng_step, env_state, env_act)
-                info = jax.tree.map(lambda x: x.reshape((config["NUM_ACTORS"])), info)
+                
+                def safe_reshape(x):
+                    if x.size == config["NUM_ACTORS"]:
+                        return x.reshape((config["NUM_ACTORS"]))
+                    else:
+                        # Handle differently sized arrays appropriately
+                        # You might need different strategies depending on what these values represent
+                        return x
+
+                info = jax.tree.map(safe_reshape, info)
+
                 done_batch = batchify(done, env.agents, config["NUM_ACTORS"]).squeeze()
                 transition = Transition(
                     jnp.tile(done["__all__"], env.num_agents),
@@ -516,13 +536,21 @@ def make_train(config):
                             "env_step": metric["update_steps"] * config["NUM_ENVS"] * config["NUM_STEPS"],
                             **metric["loss"],}
         
-                # Add attack info to logs if attack is enabled
-                if config.get("ATTACK_ENABLED", False):
+                # Add state attack info to logs if enabled
+                if config.get("STATE_ATTACK_ENABLED", False) or config.get("ATTACK_ENABLED", False):
                     log_data.update({
-                        "attack_enabled": config["ATTACK_ENABLED"],
-                        "attack_type": config["ATTACK_TYPE"],
-                        "attack_magnitude": config["ATTACK_MAGNITUDE"],
-                    })
+                        "state_attack_enabled": config.get("STATE_ATTACK_ENABLED", config.get("ATTACK_ENABLED", False)),
+                        "state_attack_type": config.get("STATE_ATTACK_TYPE", config.get("ATTACK_TYPE", "random")),
+                        "state_attack_magnitude": config.get("STATE_ATTACK_MAGNITUDE", config.get("ATTACK_MAGNITUDE", 0.1)),
+                })
+        
+                # Add action attack info to logs if enabled
+                if config.get("ACTION_ATTACK_ENABLED", False):
+                    log_data.update({
+                        "action_attack_enabled": config["ACTION_ATTACK_ENABLED"],
+                        "action_attack_type": config["ACTION_ATTACK_TYPE"],
+                        "action_attack_probability": config["ACTION_ATTACK_PROBABILITY"],
+                })
                     
                 wandb.log(log_data)
                             
@@ -553,8 +581,15 @@ def main(config):
 
     config = OmegaConf.to_container(config)
     tags = ["MAPPO", "RNN", config["ENV_NAME"]]
-    if config.get("ATTACK_ENABLED", False):
-        tags.extend(["MARLSafe", f"attack_{config.get('ATTACK_TYPE', 'random')}"])
+    
+    # Add appropriate tags based on attack configurations
+    if config.get("STATE_ATTACK_ENABLED", False) or config.get("ATTACK_ENABLED", False):
+        attack_type = config.get("STATE_ATTACK_TYPE", config.get("ATTACK_TYPE", "random"))
+        tags.extend(["MARLSafe", f"state_attack_{attack_type}"])
+        
+    if config.get("ACTION_ATTACK_ENABLED", False):
+        tags.extend(["MARLSafe", f"action_attack_{config['ACTION_ATTACK_TYPE']}"])
+        
     wandb.init(
         entity=config["ENTITY"],
         project=config["PROJECT"],

@@ -1,0 +1,15 @@
+{"time":"2025-04-16T11:48:31.53340358-04:00","level":"INFO","msg":"stream: starting","core version":"0.19.9","symlink path":"/storage/ice1/4/7/araj72/nandha_files/baselines/MAPPO/wandb/run-20250416_114831-zrf2p9ex/logs/debug-core.log"}
+{"time":"2025-04-16T11:48:31.7018226-04:00","level":"INFO","msg":"created new stream","id":"zrf2p9ex"}
+{"time":"2025-04-16T11:48:31.701867508-04:00","level":"INFO","msg":"stream: started","id":"zrf2p9ex"}
+{"time":"2025-04-16T11:48:31.701881402-04:00","level":"INFO","msg":"handler: started","stream_id":"zrf2p9ex"}
+{"time":"2025-04-16T11:48:31.701884977-04:00","level":"INFO","msg":"sender: started","stream_id":"zrf2p9ex"}
+{"time":"2025-04-16T11:48:31.701905698-04:00","level":"INFO","msg":"writer: Do: started","stream_id":"zrf2p9ex"}
+{"time":"2025-04-16T11:48:31.898867915-04:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-04-16T12:26:46.10139953-04:00","level":"INFO","msg":"stream: closing","id":"zrf2p9ex"}
+{"time":"2025-04-16T12:26:46.101434284-04:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-04-16T12:26:46.101609225-04:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-04-16T12:26:46.489751559-04:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-04-16T12:26:46.600217568-04:00","level":"INFO","msg":"handler: closed","stream_id":"zrf2p9ex"}
+{"time":"2025-04-16T12:26:46.600245784-04:00","level":"INFO","msg":"writer: Close: closed","stream_id":"zrf2p9ex"}
+{"time":"2025-04-16T12:26:46.600318997-04:00","level":"INFO","msg":"sender: closed","stream_id":"zrf2p9ex"}
+{"time":"2025-04-16T12:26:46.600540846-04:00","level":"INFO","msg":"stream: closed","id":"zrf2p9ex"}

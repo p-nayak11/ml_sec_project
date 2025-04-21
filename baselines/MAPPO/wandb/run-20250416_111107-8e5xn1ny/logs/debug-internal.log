@@ -1,0 +1,15 @@
+{"time":"2025-04-16T11:11:07.855333471-04:00","level":"INFO","msg":"stream: starting","core version":"0.19.9","symlink path":"/storage/ice1/4/7/araj72/nandha_files/baselines/MAPPO/wandb/run-20250416_111107-8e5xn1ny/logs/debug-core.log"}
+{"time":"2025-04-16T11:11:08.032914313-04:00","level":"INFO","msg":"created new stream","id":"8e5xn1ny"}
+{"time":"2025-04-16T11:11:08.032964157-04:00","level":"INFO","msg":"stream: started","id":"8e5xn1ny"}
+{"time":"2025-04-16T11:11:08.033027188-04:00","level":"INFO","msg":"writer: Do: started","stream_id":"8e5xn1ny"}
+{"time":"2025-04-16T11:11:08.033033214-04:00","level":"INFO","msg":"handler: started","stream_id":"8e5xn1ny"}
+{"time":"2025-04-16T11:11:08.033032085-04:00","level":"INFO","msg":"sender: started","stream_id":"8e5xn1ny"}
+{"time":"2025-04-16T11:11:08.278799724-04:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-04-16T11:47:54.502804477-04:00","level":"INFO","msg":"stream: closing","id":"8e5xn1ny"}
+{"time":"2025-04-16T11:47:54.502834735-04:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-04-16T11:47:54.503041731-04:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-04-16T11:47:54.843222059-04:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-04-16T11:47:54.994120945-04:00","level":"INFO","msg":"handler: closed","stream_id":"8e5xn1ny"}
+{"time":"2025-04-16T11:47:54.994164393-04:00","level":"INFO","msg":"writer: Close: closed","stream_id":"8e5xn1ny"}
+{"time":"2025-04-16T11:47:54.994169793-04:00","level":"INFO","msg":"sender: closed","stream_id":"8e5xn1ny"}
+{"time":"2025-04-16T11:47:54.994413878-04:00","level":"INFO","msg":"stream: closed","id":"8e5xn1ny"}

@@ -1,0 +1,21 @@
+{"time":"2025-04-16T13:18:05.053397232-04:00","level":"INFO","msg":"stream: starting","core version":"0.19.9","symlink path":"/storage/ice1/4/7/araj72/nandha_files/baselines/MAPPO/wandb/run-20250416_131805-ecm2qvkl/logs/debug-core.log"}
+{"time":"2025-04-16T13:18:05.233266282-04:00","level":"INFO","msg":"created new stream","id":"ecm2qvkl"}
+{"time":"2025-04-16T13:18:05.233311399-04:00","level":"INFO","msg":"stream: started","id":"ecm2qvkl"}
+{"time":"2025-04-16T13:18:05.233324652-04:00","level":"INFO","msg":"handler: started","stream_id":"ecm2qvkl"}
+{"time":"2025-04-16T13:18:05.233385853-04:00","level":"INFO","msg":"sender: started","stream_id":"ecm2qvkl"}
+{"time":"2025-04-16T13:18:05.233403777-04:00","level":"INFO","msg":"writer: Do: started","stream_id":"ecm2qvkl"}
+{"time":"2025-04-16T13:18:05.365745533-04:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-04-16T13:26:35.594773889-04:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2025-04-16T13:27:07.733539866-04:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2025-04-16T13:27:41.788599784-04:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2025-04-16T13:28:17.925945369-04:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/akshraj-georgia-institute-of-technology/MPE_MAPPO/ecm2qvkl/file_stream\": dial tcp 35.186.228.49:443: connect: connection timed out"}
+{"time":"2025-04-16T13:28:20.689435563-04:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2025-04-16T13:29:09.701304949-04:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2025-04-16T13:55:31.618498796-04:00","level":"INFO","msg":"stream: closing","id":"ecm2qvkl"}
+{"time":"2025-04-16T13:55:31.618555791-04:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-04-16T13:55:31.618675214-04:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-04-16T13:55:32.012010935-04:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-04-16T13:55:32.118545086-04:00","level":"INFO","msg":"handler: closed","stream_id":"ecm2qvkl"}
+{"time":"2025-04-16T13:55:32.118602468-04:00","level":"INFO","msg":"sender: closed","stream_id":"ecm2qvkl"}
+{"time":"2025-04-16T13:55:32.118594844-04:00","level":"INFO","msg":"writer: Close: closed","stream_id":"ecm2qvkl"}
+{"time":"2025-04-16T13:55:32.118857066-04:00","level":"INFO","msg":"stream: closed","id":"ecm2qvkl"}

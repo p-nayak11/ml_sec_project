@@ -1,0 +1,97 @@
+_wandb:
+    value:
+        cli_version: 0.19.9
+        m: []
+        python_version: 3.10.13
+        t:
+            "1":
+                - 12
+                - 45
+                - 50
+                - 55
+            "2":
+                - 12
+                - 45
+                - 50
+                - 55
+            "3":
+                - 15
+                - 16
+                - 23
+                - 55
+            "4": 3.10.13
+            "5": 0.19.9
+            "8":
+                - 5
+            "12": 0.19.9
+            "13": linux-x86_64
+ACTION_ATTACK_ENABLED:
+    value: true
+ACTION_ATTACK_PROBABILITY:
+    value: 1
+ACTION_ATTACK_STRENGTH:
+    value: 2
+ACTION_ATTACK_TARGETED_AGENTS:
+    value: null
+ACTION_ATTACK_TYPE:
+    value: adversarial
+ACTIVATION:
+    value: tanh
+ANNEAL_LR:
+    value: true
+CLIP_EPS:
+    value: 0.2
+ENT_COEF:
+    value: 0.01
+ENTITY:
+    value: ""
+ENV_NAME:
+    value: MPE_simple_spread_v3
+FC_DIM_SIZE:
+    value: 128
+GAE_LAMBDA:
+    value: 0.95
+GAMMA:
+    value: 0.99
+GRU_HIDDEN_DIM:
+    value: 128
+LR:
+    value: 0.002
+MAX_GRAD_NORM:
+    value: 0.5
+NUM_ENVS:
+    value: 16
+NUM_MINIBATCHES:
+    value: 4
+NUM_SEEDS:
+    value: 2
+NUM_STEPS:
+    value: 128
+PROJECT:
+    value: MPE_MAPPO
+RUN_COMPARISON:
+    value: false
+SCALE_CLIP_EPS:
+    value: false
+SEED:
+    value: 1
+STATE_ATTACK_ENABLED:
+    value: false
+STATE_ATTACK_FEATURES:
+    value: null
+STATE_ATTACK_MAGNITUDE:
+    value: 1
+STATE_ATTACK_PROBABILITY:
+    value: 1
+STATE_ATTACK_TARGETED_AGENTS:
+    value: null
+STATE_ATTACK_TYPE:
+    value: random
+TOTAL_TIMESTEPS:
+    value: 2e+07
+UPDATE_EPOCHS:
+    value: 4
+VF_COEF:
+    value: 0.5
+WANDB_MODE:
+    value: online

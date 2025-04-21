@@ -1,0 +1,95 @@
+Error executing job with overrides: []
+Traceback (most recent call last):
+  File "/storage/ice1/4/7/araj72/nandha_files/baselines/MAPPO/mappo_rnn_mpe.py", line 618, in main
+    out = train_jit(rng)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/traceback_util.py", line 180, in reraise_with_filtered_traceback
+    return fun(*args, **kwargs)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/pjit.py", line 339, in cache_miss
+    pgle_profiler) = _python_pjit_helper(fun, jit_info, *args, **kwargs)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/pjit.py", line 179, in _python_pjit_helper
+    p, args_flat = _infer_params(fun, jit_info, args, kwargs)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/pjit.py", line 695, in _infer_params
+    return _infer_params_internal(fun, ji, args, kwargs)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/pjit.py", line 718, in _infer_params_internal
+    p, args_flat = _infer_params_impl(
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/pjit.py", line 618, in _infer_params_impl
+    jaxpr, consts, out_avals, attrs_tracked = _create_pjit_jaxpr(
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/linear_util.py", line 460, in memoized_fun
+    ans = call(fun, *args)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/pjit.py", line 1289, in _create_pjit_jaxpr
+    jaxpr, global_out_avals, consts, attrs_tracked = pe.trace_to_jaxpr_dynamic(
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/profiler.py", line 334, in wrapper
+    return func(*args, **kwargs)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/interpreters/partial_eval.py", line 2181, in trace_to_jaxpr_dynamic
+    ans = fun.call_wrapped(*in_tracers)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/linear_util.py", line 210, in call_wrapped
+    return self.f_transformed(*args, **kwargs)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/api_util.py", line 284, in _argnums_partial
+    return _fun(*args, **kwargs)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/api_util.py", line 73, in flatten_fun
+    ans = f(*py_args, **py_kwargs)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/linear_util.py", line 388, in _get_result_paths_thunk
+    ans = _fun(*args, **kwargs)
+  File "/storage/ice1/4/7/araj72/nandha_files/baselines/MAPPO/mappo_rnn_mpe.py", line 565, in train
+    runner_state, metric = jax.lax.scan(
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/traceback_util.py", line 180, in reraise_with_filtered_traceback
+    return fun(*args, **kwargs)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/lax/control_flow/loops.py", line 304, in scan
+    init_flat, carry_avals, carry_avals_out, init_tree, *rest = _create_jaxpr(init)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/lax/control_flow/loops.py", line 286, in _create_jaxpr
+    jaxpr, consts, out_tree, attrs_tracked = _initial_style_jaxpr_attrs(
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/lax/control_flow/common.py", line 77, in _initial_style_jaxpr_attrs
+    jaxpr, consts, out_tree, attrs_tracked = _initial_style_open_jaxpr(
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/lax/control_flow/common.py", line 59, in _initial_style_open_jaxpr
+    jaxpr, _, consts, attrs_tracked = pe.trace_to_jaxpr_dynamic(
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/profiler.py", line 334, in wrapper
+    return func(*args, **kwargs)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/interpreters/partial_eval.py", line 2181, in trace_to_jaxpr_dynamic
+    ans = fun.call_wrapped(*in_tracers)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/linear_util.py", line 210, in call_wrapped
+    return self.f_transformed(*args, **kwargs)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/api_util.py", line 90, in flatten_fun_nokwargs
+    ans = f(*py_args)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/linear_util.py", line 388, in _get_result_paths_thunk
+    ans = _fun(*args, **kwargs)
+  File "/storage/ice1/4/7/araj72/nandha_files/baselines/MAPPO/mappo_rnn_mpe.py", line 329, in _update_step
+    runner_state, traj_batch = jax.lax.scan(
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/traceback_util.py", line 180, in reraise_with_filtered_traceback
+    return fun(*args, **kwargs)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/lax/control_flow/loops.py", line 304, in scan
+    init_flat, carry_avals, carry_avals_out, init_tree, *rest = _create_jaxpr(init)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/lax/control_flow/loops.py", line 286, in _create_jaxpr
+    jaxpr, consts, out_tree, attrs_tracked = _initial_style_jaxpr_attrs(
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/lax/control_flow/common.py", line 77, in _initial_style_jaxpr_attrs
+    jaxpr, consts, out_tree, attrs_tracked = _initial_style_open_jaxpr(
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/lax/control_flow/common.py", line 59, in _initial_style_open_jaxpr
+    jaxpr, _, consts, attrs_tracked = pe.trace_to_jaxpr_dynamic(
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/profiler.py", line 334, in wrapper
+    return func(*args, **kwargs)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/interpreters/partial_eval.py", line 2181, in trace_to_jaxpr_dynamic
+    ans = fun.call_wrapped(*in_tracers)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/linear_util.py", line 210, in call_wrapped
+    return self.f_transformed(*args, **kwargs)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/api_util.py", line 90, in flatten_fun_nokwargs
+    ans = f(*py_args)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/linear_util.py", line 388, in _get_result_paths_thunk
+    ans = _fun(*args, **kwargs)
+  File "/storage/ice1/4/7/araj72/nandha_files/baselines/MAPPO/mappo_rnn_mpe.py", line 312, in _env_step
+    info = jax.tree.map(lambda x: x.reshape((config["NUM_ACTORS"])), info)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/tree.py", line 155, in map
+    return tree_util.tree_map(f, tree, *rest, is_leaf=is_leaf)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/tree_util.py", line 358, in tree_map
+    return treedef.unflatten(f(*xs) for xs in zip(*all_leaves))
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/tree_util.py", line 358, in <genexpr>
+    return treedef.unflatten(f(*xs) for xs in zip(*all_leaves))
+  File "/storage/ice1/4/7/araj72/nandha_files/baselines/MAPPO/mappo_rnn_mpe.py", line 312, in <lambda>
+    info = jax.tree.map(lambda x: x.reshape((config["NUM_ACTORS"])), info)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/numpy/array_methods.py", line 1066, in meth
+    return getattr(self.aval, name).fun(self, *args, **kwargs)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/numpy/array_methods.py", line 309, in _reshape
+    newshape = _compute_newshape(self, args[0] if len(args) == 1 else args)
+  File "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/lib/python3.10/site-packages/jax/_src/numpy/array_methods.py", line 470, in _compute_newshape
+    raise TypeError(f"cannot reshape array of shape {arr.shape} (size {arr.size}) "
+TypeError: cannot reshape array of shape (16,) (size 16) into shape 48 (size 48)
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.

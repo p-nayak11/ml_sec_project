@@ -1,6 +1,6 @@
 "LR": 2e-3
-"NUM_ENVS": 16 
-"NUM_STEPS": 128 
+"NUM_ENVS": 16
+"NUM_STEPS": 128
 "TOTAL_TIMESTEPS": 2e7
 "FC_DIM_SIZE": 128
 "GRU_HIDDEN_DIM": 128
@@ -20,12 +20,21 @@
 "ENV_KWARGS": {}
 "ANNEAL_LR": True
 
-ATTACK_ENABLED: true
-ATTACK_TYPE: "random"  # random, targeted, strategic
-ATTACK_MAGNITUDE: 1
-ATTACK_PROBABILITY: 1
-ATTACK_TARGETED_AGENTS: null  # null means all agents
-ATTACK_FEATURES: null  # null means all features
+# State Attack parameters 
+STATE_ATTACK_ENABLED: false  # Set to false by default
+STATE_ATTACK_TYPE: "random"  # random, targeted, strategic
+STATE_ATTACK_MAGNITUDE: 1
+STATE_ATTACK_PROBABILITY: 1
+STATE_ATTACK_TARGETED_AGENTS: null  # null means all agents
+STATE_ATTACK_FEATURES: null  # null means all features
+
+# Action Attack parameters
+ACTION_ATTACK_ENABLED: true
+ACTION_ATTACK_TYPE: "adversarial"  # random, targeted, inversion, adversarial
+ACTION_ATTACK_PROBABILITY: 1.0
+ACTION_ATTACK_STRENGTH: 2
+ACTION_ATTACK_TARGETED_AGENTS: null  # null means all agents
+
 RUN_COMPARISON: false  # set to true if you want to run both with and without attack
 
 # WandB Params

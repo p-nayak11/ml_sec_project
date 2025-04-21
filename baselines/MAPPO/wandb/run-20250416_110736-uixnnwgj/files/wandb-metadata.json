@@ -1,0 +1,88 @@
+{
+  "os": "Linux-5.14.0-427.42.1.el9_4.x86_64-x86_64-with-glibc2.34",
+  "python": "CPython 3.10.13",
+  "startedAt": "2025-04-16T15:07:36.923331Z",
+  "args": [
+    "--config-name=mappo_attack_mpe"
+  ],
+  "program": "/storage/ice1/4/7/araj72/nandha_files/baselines/MAPPO/mappo_rnn_mpe.py",
+  "codePath": "baselines/MAPPO/mappo_rnn_mpe.py",
+  "git": {
+    "remote": "https://github.com/p-nayak11/ml_sec_project.git",
+    "commit": "99afbf37e3b95aa29eba99ec3b8f9aadf1a78e6e"
+  },
+  "email": "aksh.raj@gmail.com",
+  "root": "/storage/ice1/4/7/araj72/nandha_files/baselines/MAPPO",
+  "host": "atl1-1-03-013-3-0.pace.gatech.edu",
+  "executable": "/home/hice1/araj72/.cache/pypoetry/virtualenvs/jaxmarl-lXchKzd8-py3.10/bin/python",
+  "codePathLocal": "mappo_rnn_mpe.py",
+  "cpu_count": 64,
+  "cpu_count_logical": 64,
+  "gpu": "NVIDIA H100 80GB HBM3",
+  "gpu_count": 1,
+  "disk": {
+    "/": {
+      "total": "53619982336",
+      "used": "23994646528"
+    }
+  },
+  "memory": {
+    "total": "2163638546432"
+  },
+  "cpu": {
+    "count": 64,
+    "countLogical": 64
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA H100 80GB HBM3",
+      "memoryTotal": "85520809984",
+      "cudaCores": 16896,
+      "architecture": "Hopper"
+    }
+  ],
+  "slurm": {
+    "cluster_name": "ice-slurm",
+    "conf": "/var/lib/slurm/slurmd/conf-cache/slurm.conf",
+    "cpus_on_node": "4",
+    "export_env": "NONE",
+    "get_user_env": "1",
+    "gpus_on_node": "1",
+    "gtids": "0",
+    "job_account": "coc",
+    "job_cpus_per_node": "4",
+    "job_end_time": "1744826265",
+    "job_gid": "2626",
+    "job_gpus": "4",
+    "job_id": "2472668",
+    "job_name": "sys/dashboard/sys/bc_codeserver_rh9",
+    "job_nodelist": "atl1-1-03-013-3-0",
+    "job_num_nodes": "1",
+    "job_partition": "ice-gpu",
+    "job_qos": "coc-ice",
+    "job_start_time": "1744815465",
+    "job_uid": "1181847",
+    "job_user": "araj72",
+    "jobid": "2472668",
+    "localid": "0",
+    "mem_per_node": "16384",
+    "nnodes": "1",
+    "nodeid": "0",
+    "nodelist": "atl1-1-03-013-3-0",
+    "nprocs": "4",
+    "ntasks": "4",
+    "ntasks_per_node": "4",
+    "oom_kill_step": "0",
+    "pmix_tmpdir": "/tmp",
+    "prio_process": "0",
+    "procid": "0",
+    "script_context": "prolog_task",
+    "submit_dir": "/var/www/ood/apps/sys/dashboard",
+    "submit_host": "ondemand-ice.pace.gatech.edu",
+    "task_pid": "884084",
+    "tasks_per_node": "4",
+    "topology_addr": "atl1-1-03-013-3-0",
+    "topology_addr_pattern": "node"
+  },
+  "cudaVersion": "12.5"
+}
